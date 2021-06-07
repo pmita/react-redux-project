@@ -4,10 +4,22 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 //Let's import everything redux related
 import {createStore} from 'redux';
+import {Provider} from 'react-redux';
+//Let's import our combined reducers
+import allReducers from './reducers/index';
 
+/*
+  We cannot pass in multiple reducers on our createStore function. As such
+  we need to bind all our reducers together with combineReducers(), which is what
+  we have done on the reducers/index.js
+*/
+const store = createStore(
+  allReducers,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() 
+); //Setting our redux Store
 
-
-//STORE acts as our globalized state
+//---------Typically this is all you have
+/*//STORE acts as our globalized state
 let store = createStore(counter);
 store.subscribe(() =>  console.log(store.getState()));
 
@@ -36,11 +48,13 @@ const counter = (state = 0, action) => {
 //DISPATCH is where the changes happen to our state
 store.dispatch(increment());
 store.dispatch(decrement());
-store.dispatch(decrement());
+store.dispatch(decrement());*/
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+          <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
